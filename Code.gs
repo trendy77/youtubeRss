@@ -1,7 +1,7 @@
 // from       https://developers.google.com/youtube/v3/quickstart/apps-script
 // Note: Apps Script automatically requests authorization
 
-var YTS = "1JrzhN78LF1p9SSAqg1eVrXqhibziW9tf-W8y1yYowJY";
+var YTS = "";
 
 function channelsListByUsername(part, params) {
   var response = YouTube.Channels.list(part,

@@ -77,53 +77,28 @@ function searchLive(part, eventType, maxResults, q, type) {
   return(response);
 }
 
-function getVidsFromPlist(playId) {
-  var nextPageToken = '';		    // This loop retrieves a set of playlist items and 
-	var arrData = new Array();					//checks the nextPageToken response to determine whether the list contains additional items. It repeats until it has retrieved all of the items in the list.
-    while (nextPageToken != null) {
-      var playlistResponse = YouTube.PlaylistItems.list(part, {id: playId,
-        maxResults: 50,
-       });
-      for (var j = 0; j < playlistResponse.items.length; j++) {
-        var playlistItem = playlistResponse.items[j];
-       for (var y = 0; y < playlistItem.length; y++) {
-        var vidItem = playlistItem[y];  
-                   playlistItem.snippet.resourceId.videoId,
-                   playlistItem.snippet.title);
-      }
-      nextPageToken = playlistResponse.nextPageToken;
-    }
-  }
-
+function myMain() {
+  activitiesList('snippet,contentDetails', 'UC_x5XG1OV2P6uZZ5FSM9Ttw', 25);
+  activitiesListMine('snippet,contentDetails', 25, true);
+  channelsListById('snippet,contentDetails,statistics', 'UC_x5XG1OV2P6uZZ5FSM9Ttw');
+  channelsListByUsername('snippet,contentDetails,statistics', 'GoogleDevelopers');
+  channelsListMine('snippet,contentDetails,statistics', true);
+  channelSectionsListById('snippet,contentDetails', 'UC_x5XG1OV2P6uZZ5FSM9Ttw');
+  channelSectionsListMine('snippet,contentDetails', true);
+  playlistItemsListByPlaylistId('snippet,contentDetails', 25, 'PLBCF2DAC6FFB574DE');
+  playlistsListByChannelId('snippet,contentDetails', 'UC_x5XG1OV2P6uZZ5FSM9Ttw', 25);
+  playlistsListMine('snippet,contentDetails', true);
+  searchListByKeyword('snippet', 25, 'surfing', 'video');
   
-function getSharedCount(sourceLink){
-//var url = "http://mashe.hawksey.info/2012/02/oer-visualisation-project-fin-day-40-5/"
-  var url = extractLink(sourceLink);
-  var cache = CacheService.getPublicCache(); // using Cache service to prevent too many urlfetch 
-  var cached = cache.get("C"+url);
-  if (cached != null) { // if value in cache return it
-    //var test = cached.split(",")
-    return cached.split(",");
-  }
-  try {
-    var options =
-    {
-      "method" : "get",
-      "contentType" : "application/json"
-    };
-    var response = UrlFetchApp.fetch("http://api.sharedcount.com/?url="+encodeURI(url), options);
-    var data = Utilities.jsonParse(response.getContentText());
-    var output = [];
-    for (i in data){
-      if (i == "Facebook"){
-        output.push(data[i].total_count)
-      } else {
-        output.push(data[i]);
-      }
-    }
-    cache.put("C"+url, output, 86400); // cache set for 1 day
-    return output;
-  } catch(e){
-    Logger.log(e);
-  }
-}
+  searchListMine('snippet', 25, true, 'fun', 'video');
+  searchListRelatedVideos('snippet', 'Ks-_Mh1QhMc', 'video');
+  subscriptionsListByChannelId('snippet,contentDetails', 'UC_x5XG1OV2P6uZZ5FSM9Ttw');
+  subscriptionsListForChannelId('snippet,contentDetails', 'UC_x5XG1OV2P6uZZ5FSM9Ttw', true);
+  subscriptionsListMySubscribers('snippet,contentDetails,subscriberSnippet', true);
+  subscriptionsListMySubscriptions('snippet,contentDetails', true);
+  videoCategoriesList('snippet', 'US');
+  videoCategoriesListForRegion('snippet', 'es', 'ES');
+  videosListById('snippet,contentDetails,statistics', 'Ks-_Mh1QhMc');
+  videosListMostPopular();
+ 
+ }

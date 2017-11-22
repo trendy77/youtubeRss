@@ -1,11 +1,66 @@
+
+function useYT(opt, id) {
+    if (opt == '1') {
+        var resp = channelsListByUsername('snippet,contentDetails,statistics', id);
+    }
+    else if (opt == '2') {
+        var resp = videosListMostPopular('snippet,contentDetails,statistics', 'mostPopular', 'US', '');
+    }
+    else if (opt == '3') {
+       var resp = playlistsListByChannelId('snippet,contentDetails', id, 25);
+   }
+    else if (opt == '4') {
+      var resp = playlistItemsListByPlaylistId('snippet,contentDetails', 25, id);
+   }
+ else if (opt == '5') {
+       var resp = playlistsListMine('snippet,contentDetails', true);
+   }
+    return resp;
+}
+
+function Main() {
+    activitiesList('snippet,contentDetails', 'UC_x5XG1OV2P6uZZ5FSM9Ttw', 25);
+    activitiesListMine('snippet,contentDetails', 25, true);
+    captionsList('snippet', 'M7FIvfx5J10');
+    channelsListById('snippet,contentDetails,statistics', 'UC_x5XG1OV2P6uZZ5FSM9Ttw');
+    
+    channelsListMine('snippet,contentDetails,statistics', true);
+    channelSectionsListById('snippet,contentDetails', 'UC_x5XG1OV2P6uZZ5FSM9Ttw');
+    channelSectionsListMine('snippet,contentDetails', true);
+    commentsList('snippet', 'z13icrq45mzjfvkpv04ce54gbnjgvroojf0');
+    commentThreadsListAllThreadsByChannelId('snippet,replies', 'UC_x5XG1OV2P6uZZ5FSM9Ttw');
+    commentThreadsListByChannelId('snippet,replies', 'UCAuUUnT6oDeKwE6v1NGQxug');
+    commentThreadsListByVideoId('snippet,replies', 'm4Jtj2lCMAA');
+    i18nLanguagesList('snippet', 'es_MX');
+    i18nRegionsList('snippet', 'es_MX');
+    videoCategoriesList('snippet', 'US');
+
+    searchListByKeyword('snippet', 25, 'surfing', 'video');
+    searchListByLocation('snippet', '21.5922529,-158.1147114', '10mi', 'surfing', 'video');
+    searchListLiveEvents('snippet', 'live', 25, 'news', 'video');
+    searchListMine('snippet', 25, true, 'fun', 'video');
+    searchListRelatedVideos('snippet', 'Ks-_Mh1QhMc', 'video');
+    subscriptionsListByChannelId('snippet,contentDetails', 'UC_x5XG1OV2P6uZZ5FSM9Ttw');
+    subscriptionsListForChannelId('snippet,contentDetails', 'UC_x5XG1OV2P6uZZ5FSM9Ttw', true);
+    subscriptionsListMySubscribers('snippet,contentDetails,subscriberSnippet', true);
+    subscriptionsListMySubscriptions('snippet,contentDetails', true);
+    videoAbuseReportReasonsList('snippet');
+   
+    videoCategoriesListForRegion('snippet', 'es', 'ES');
+    videosListById('snippet,contentDetails,statistics', 'Ks-_Mh1QhMc');
+    
+    videosListMultipleIds('snippet,contentDetails,statistics', 'Ks-_Mh1QhMc,c0KYU2j0TM4,eIho2S0ZahI');
+    videosListMyRatedVideos('snippet,contentDetails,statistics', 'like');
+    videosGetRating('Ks-_Mh1QhMc,c0KYU2j0TM4,eIho2S0ZahI');
+}
+
 // Sample Apps Script code for printing API response data
-function printResults(response) {
- scribeResults(response);
+
+function youtube(response) {
   var props = ['type', 'title', 'textDisplay', 'channelId', 'videoId', 'hl', 'gl', 'label'];
   for (var r = 0; r < response['items'].length; r++) {
     var item = response['items'][r];
-    var itemId = '';
-    var value;
+    var itemId = ''; var value;
     if (item['rating']) {
       itemId = item['id'];
       value = 'Rating: ' + item['rating'];
@@ -14,14 +69,17 @@ function printResults(response) {
         itemId = item['id']['videoId'];
         
       } else if (item['id']['channelId']) {
-        itemId = item['id']['channelId'];
+          itemId = item['id']['channelId'];
+
       } else {
-        itemId = item['id'];
+          itemId = item['id'];
+
+        }
+      for (var t in item) {
+          var line = item[t];
+         // SpreadsheetApp.getActiveSpreadsheet.getSheetByName(sht).appendRow();
       }
-      
- 
     }
-    Logger.log(value);
   }
 }
 
@@ -34,7 +92,7 @@ function activitiesList(part, channelId, maxResults) {
   var response = YouTube.Activities.list(part,
       {'channelId': channelId,
        'maxResults': maxResults});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -53,13 +111,8 @@ function activitiesListMine(part, maxResults, mine) {
  */
 function captionsList(part, videoId) {
   var response = YouTube.Captions.list(part, videoId);
-  printResults(response);
+  return(response);
 }
-
-/**
- * This example retrieves channel data for the GoogleDevelopers YouTube channel. It uses the id request parameter to identify the channel by its YouTube channel ID. 
- */
-
 
 /**
  * This example retrieves channel data for the GoogleDevelopers YouTube channel. It uses the forUsername request parameter to identify the channel by its 
@@ -68,7 +121,7 @@ function captionsList(part, videoId) {
 function channelsListByUsername(part, forUsername) {
   var response = YouTube.Channels.list(part,
       {'forUsername': forUsername});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -78,8 +131,7 @@ function channelsListByUsername(part, forUsername) {
 function channelsListMine(part, mine) {
   var response = YouTube.Channels.list(part,
       {'mine': mine});
-  printResults(response);
-   scribeResults('my',response);
+  return(response);
 }
 
 /**
@@ -88,7 +140,7 @@ function channelsListMine(part, mine) {
 function channelSectionsListById(part, channelId) {
   var response = YouTube.ChannelSections.list(part,
       {'channelId': channelId});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -98,7 +150,7 @@ function channelSectionsListById(part, channelId) {
 function channelSectionsListMine(part, mine) {
   var response = YouTube.ChannelSections.list(part,
       {'mine': mine});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -109,7 +161,7 @@ function channelSectionsListMine(part, mine) {
 function commentsList(part, parentId) {
   var response = YouTube.Comments.list(part,
       {'parentId': parentId});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -119,7 +171,7 @@ function commentsList(part, parentId) {
 function commentThreadsListAllThreadsByChannelId(part, allThreadsRelatedToChannelId) {
   var response = YouTube.CommentThreads.list(part,
       {'allThreadsRelatedToChannelId': allThreadsRelatedToChannelId});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -129,7 +181,7 @@ function commentThreadsListAllThreadsByChannelId(part, allThreadsRelatedToChanne
 function commentThreadsListByChannelId(part, channelId) {
   var response = YouTube.CommentThreads.list(part,
       {'channelId': channelId});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -138,7 +190,7 @@ function commentThreadsListByChannelId(part, channelId) {
 function commentThreadsListByVideoId(part, videoId) {
   var response = YouTube.CommentThreads.list(part,
       {'videoId': videoId});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -148,7 +200,7 @@ function commentThreadsListByVideoId(part, videoId) {
 function i18nLanguagesList(part, hl) {
   var response = YouTube.I18nLanguages.list(part,
       {'hl': hl});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -158,7 +210,7 @@ function i18nLanguagesList(part, hl) {
 function i18nRegionsList(part, hl) {
   var response = YouTube.I18nRegions.list(part,
       {'hl': hl});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -169,7 +221,7 @@ function playlistItemsListByPlaylistId(part, maxResults, playlistId) {
   var response = YouTube.PlaylistItems.list(part,
       {'maxResults': maxResults,
        'playlistId': playlistId});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -179,7 +231,7 @@ function playlistsListByChannelId(part, channelId, maxResults) {
   var response = YouTube.Playlists.list(part,
       {'channelId': channelId,
        'maxResults': maxResults});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -189,7 +241,7 @@ function playlistsListByChannelId(part, channelId, maxResults) {
 function playlistsListMine(part, mine) {
   var response = YouTube.Playlists.list(part,
       {'mine': mine});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -201,7 +253,7 @@ function searchListByKeyword(part, maxResults, q, type) {
       {'maxResults': maxResults,
        'q': q,
        'type': type});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -215,7 +267,7 @@ function searchListByLocation(part, location, locationRadius, q, type) {
        'locationRadius': locationRadius,
        'q': q,
        'type': type});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -228,7 +280,7 @@ function searchListLiveEvents(part, eventType, maxResults, q, type) {
        'maxResults': maxResults,
        'q': q,
        'type': type});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -242,7 +294,7 @@ function searchListMine(part, maxResults, forMine, q, type) {
        'forMine': forMine,
        'q': q,
        'type': type});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -253,7 +305,7 @@ function searchListRelatedVideos(part, relatedToVideoId, type) {
   var response = YouTube.Search.list(part,
       {'relatedToVideoId': relatedToVideoId,
        'type': type});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -263,7 +315,7 @@ function searchListRelatedVideos(part, relatedToVideoId, type) {
 function subscriptionsListByChannelId(part, channelId) {
   var response = YouTube.Subscriptions.list(part,
       {'channelId': channelId});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -276,7 +328,7 @@ function subscriptionsListForChannelId(part, forChannelId, mine) {
   var response = YouTube.Subscriptions.list(part,
       {'forChannelId': forChannelId,
        'mine': mine});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -285,7 +337,7 @@ function subscriptionsListForChannelId(part, forChannelId, mine) {
 function subscriptionsListMySubscribers(part, mySubscribers) {
   var response = YouTube.Subscriptions.list(part,
       {'mySubscribers': mySubscribers});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -294,7 +346,7 @@ function subscriptionsListMySubscribers(part, mySubscribers) {
 function subscriptionsListMySubscriptions(part, mine) {
   var response = YouTube.Subscriptions.list(part,
       {'mine': mine});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -304,7 +356,7 @@ function subscriptionsListMySubscriptions(part, mine) {
  */
 function videoAbuseReportReasonsList(part) {
   var response = YouTube.VideoAbuseReportReasons.list(part);
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -314,7 +366,7 @@ function videoAbuseReportReasonsList(part) {
 function videoCategoriesList(part, regionCode) {
   var response = YouTube.VideoCategories.list(part,
       {'regionCode': regionCode});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -324,7 +376,7 @@ function videoCategoriesListForRegion(part, hl, regionCode) {
   var response = YouTube.VideoCategories.list(part,
       {'hl': hl,
        'regionCode': regionCode});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -333,7 +385,7 @@ function videoCategoriesListForRegion(part, hl, regionCode) {
 function videosListById(part, id) {
   var response = YouTube.Videos.list(part,
       {'id': id});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -345,7 +397,7 @@ function videosListMostPopular(part, chart, regionCode, videoCategoryId) {
       {'chart': chart,
        'regionCode': regionCode,
        'videoCategoryId': videoCategoryId});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -355,7 +407,7 @@ function videosListMostPopular(part, chart, regionCode, videoCategoryId) {
 function videosListMultipleIds(part, id) {
   var response = YouTube.Videos.list(part,
       {'id': id});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -364,7 +416,7 @@ function videosListMultipleIds(part, id) {
 function videosListMyRatedVideos(part, myRating) {
   var response = YouTube.Videos.list(part,
       {'myRating': myRating});
-  printResults(response);
+  return(response);
 }
 
 /**
@@ -372,44 +424,7 @@ function videosListMyRatedVideos(part, myRating) {
  */
 function videosGetRating(id) {
   var response = YouTube.Videos.getRating(id);
-  printResults(response);
-}
-
-function Main() {
-  activitiesList('snippet,contentDetails', 'UC_x5XG1OV2P6uZZ5FSM9Ttw', 25);
-  activitiesListMine('snippet,contentDetails', 25, true);
-  captionsList('snippet', 'M7FIvfx5J10');
-  channelsListById('snippet,contentDetails,statistics', 'UC_x5XG1OV2P6uZZ5FSM9Ttw');
-  channelsListByUsername('snippet,contentDetails,statistics', 'GoogleDevelopers');
-  channelsListMine('snippet,contentDetails,statistics', true);
-  channelSectionsListById('snippet,contentDetails', 'UC_x5XG1OV2P6uZZ5FSM9Ttw');
-  channelSectionsListMine('snippet,contentDetails', true);
-  commentsList('snippet', 'z13icrq45mzjfvkpv04ce54gbnjgvroojf0');
-  commentThreadsListAllThreadsByChannelId('snippet,replies', 'UC_x5XG1OV2P6uZZ5FSM9Ttw');
-  commentThreadsListByChannelId('snippet,replies', 'UCAuUUnT6oDeKwE6v1NGQxug');
-  commentThreadsListByVideoId('snippet,replies', 'm4Jtj2lCMAA');
-  i18nLanguagesList('snippet', 'es_MX');
-  i18nRegionsList('snippet', 'es_MX');
-  playlistItemsListByPlaylistId('snippet,contentDetails', 25, 'PLBCF2DAC6FFB574DE');
-  playlistsListByChannelId('snippet,contentDetails', 'UC_x5XG1OV2P6uZZ5FSM9Ttw', 25);
-  playlistsListMine('snippet,contentDetails', true);
-  searchListByKeyword('snippet', 25, 'surfing', 'video');
-  searchListByLocation('snippet', '21.5922529,-158.1147114', '10mi', 'surfing', 'video');
-  searchListLiveEvents('snippet', 'live', 25, 'news', 'video');
-  searchListMine('snippet', 25, true, 'fun', 'video');
-  searchListRelatedVideos('snippet', 'Ks-_Mh1QhMc', 'video');
-  subscriptionsListByChannelId('snippet,contentDetails', 'UC_x5XG1OV2P6uZZ5FSM9Ttw');
-  subscriptionsListForChannelId('snippet,contentDetails', 'UC_x5XG1OV2P6uZZ5FSM9Ttw', true);
-  subscriptionsListMySubscribers('snippet,contentDetails,subscriberSnippet', true);
-  subscriptionsListMySubscriptions('snippet,contentDetails', true);
-  videoAbuseReportReasonsList('snippet');
-  videoCategoriesList('snippet', 'US');
-  videoCategoriesListForRegion('snippet', 'es', 'ES');
-  videosListById('snippet,contentDetails,statistics', 'Ks-_Mh1QhMc');
-  videosListMostPopular('snippet,contentDetails,statistics', 'mostPopular', 'US', '');
-  videosListMultipleIds('snippet,contentDetails,statistics', 'Ks-_Mh1QhMc,c0KYU2j0TM4,eIho2S0ZahI');
-  videosListMyRatedVideos('snippet,contentDetails,statistics', 'like');
-  videosGetRating('Ks-_Mh1QhMc,c0KYU2j0TM4,eIho2S0ZahI');
+  return(response);
 }
 
 // CHANNEL VARIABLES
